@@ -1,1 +1,58 @@
-# DebuggingAssignment
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mortgage Calculator</title>
+</head>
+<body>
+    <h1>Mortgage Calculator</h1>
+    <form id="mortgageForm">
+        <table>
+            <tr>
+                <td><label for="principal">Loan Amount ($):</label></td>
+                <td><input type="number" id="principal" required></td>
+            </tr>
+            <tr>
+                <td><label for="rate">Interest Rate (%):</label></td>
+                <td><input type="number" id="rate" step="0.01" required></td>
+            </tr>
+            <tr>
+                <td><label for="years">Loan Term (years):</label></td>
+                <td><input type="number" id="years" required></td>
+            </tr>
+        </table>
+        <button type="button" onclick="calculateMortgage()">Calculate</button>
+    </form>
+    <p id="result"></p>
+    
+    <script>
+        function calculateMortgage() {
+            // Get and convert values from input
+            const principal = parseFloat(document.getElementById("principal").value);
+            const annualRate = parseFloat(document.getElementById("rate").value);
+            const years = parseInt(document.getElementById("years").value);
+
+            if (isNaN(principal) || isNaN(annualRate) || isNaN(years)) {
+                document.getElementById("result").innerText = "Please fill out all fields with valid numbers.";
+                return;
+            }
+
+            const monthlyRate = annualRate / 100 / 12;
+            const numPayments = years * 12;
+
+            if (monthlyRate === 0) {
+                const monthlyPayment = principal / numPayments;
+                document.getElementById("result").innerText = `Your monthly payment is $${monthlyPayment.toFixed(2)}`;
+                return;
+            }
+
+            const rateFactor = Math.pow(1 + monthlyRate, numPayments);
+            const monthlyPayment = (principal * monthlyRate * rateFactor) / (rateFactor - 1);
+
+            document.getElementById("result").innerText = `Your monthly payment is $${monthlyPayment.toFixed(2)}`;
+        }
+    </script>
+</body>
+</html>
+
